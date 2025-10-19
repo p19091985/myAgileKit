@@ -82,18 +82,18 @@ class FileMergerApp:
         self.process_button = ttk.Button(parent, text="Iniciar Fusão de Arquivos", command=self.start_processing_thread)
         self.process_button.pack(pady=10, fill=tk.X, ipady=5)
 
-        # --- LOG DE PROGRESSO (LAYOUT CORRIGIDO) ---
+                                                     
         log_frame = ttk.LabelFrame(parent, text="Log de Progresso", padding="10")
         log_frame.pack(fill="both", expand=True, pady=5)
 
-        # Frame para a barra de ferramentas (botão de cópia)
+                                                            
         toolbar_frame = ttk.Frame(log_frame)
         toolbar_frame.pack(fill='x', pady=(0, 5))
 
         self.copy_log_button = ttk.Button(toolbar_frame, text="Copiar Log", command=self.copy_log_to_clipboard)
-        self.copy_log_button.pack(side="right")  # Botão alinhado à direita do seu próprio frame
+        self.copy_log_button.pack(side="right")                                                 
 
-        # Frame para a área de texto e a barra de rolagem
+                                                         
         text_area_frame = ttk.Frame(log_frame)
         text_area_frame.pack(fill='both', expand=True)
 

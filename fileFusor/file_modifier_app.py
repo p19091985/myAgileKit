@@ -18,7 +18,7 @@ class CommentRemoverApp:
 
     def __init__(self, root):
         self.root = root
-        # Título atualizado para refletir as novas capacidades
+                                                              
         self.root.title("Removedor de Comentários v3.0 (.py, .sql, C/C++)")
         self.root.geometry("700x680")
         self.root.minsize(600, 600)
@@ -54,23 +54,23 @@ class CommentRemoverApp:
 
         self.extension_vars = {}
 
-        # --- INÍCIO DA MODIFICAÇÃO ---
-        # Adicionadas as extensões de C/C++
+                                       
+                                           
         target_extensions = ['.py', '.sql', '.c', '.h', '.cpp', '.hpp']
-        num_columns = 4  # Ajustar o número de colunas para o layout
+        num_columns = 4                                             
 
         for i, ext in enumerate(target_extensions):
-            # MODIFICADO: value=True para value=False
+                                                     
             var = tk.BooleanVar(value=False)
             cb = ttk.Checkbutton(ext_frame, text=ext, variable=var)
 
-            # Layout de grid flexível
+                                     
             row = i // num_columns
             col = i % num_columns
             cb.grid(row=row, column=col, sticky=tk.W, padx=5, pady=2)
 
             self.extension_vars[ext] = var
-        # --- FIM DA MODIFICAÇÃO ---
+                                    
 
         ignore_frame = ttk.LabelFrame(parent, text="3. Pastas a Ignorar (separadas por vírgula)", padding="10")
         ignore_frame.pack(fill=tk.X, expand=True, pady=5)
@@ -93,7 +93,7 @@ class CommentRemoverApp:
                                          command=self.start_processing_thread)
         self.process_button.pack(pady=10, fill=tk.X, ipady=5)
 
-        # --- Log de Progresso na Tela ---
+                                          
         log_frame = ttk.LabelFrame(parent, text="Log de Progresso", padding="10")
         log_frame.pack(fill="both", expand=True, pady=5)
         toolbar_frame = ttk.Frame(log_frame)
@@ -160,34 +160,34 @@ class CommentRemoverApp:
         """Usa o tokenizador do Python para remover comentários de forma segura."""
         try:
             tokens = tokenize.generate_tokens(io.StringIO(source_code).readline)
-            # Filtra para remover apenas os tokens de comentário
+                                                                
             non_comment_tokens = [tok for tok in tokens if tok.type != tokenize.COMMENT]
-            # Usa a função untokenize para reconstruir o código corretamente
+                                                                            
             return tokenize.untokenize(non_comment_tokens)
         except (tokenize.TokenError, IndentationError):
-            # Em caso de erro (código inválido), retorna o original para não corromper
+                                                                                      
             return source_code
 
     def remove_sql_comments(self, sql_code):
         """Remove comentários de linha (--) e de bloco (/*...*/) de um código SQL."""
-        # Remove comentários em bloco /* ... */, incluindo os que se estendem por várias linhas
+                                                                                               
         code = re.sub(r'/\*.*?\*/', '', sql_code, flags=re.DOTALL)
-        # Remove comentários de linha -- ... até o final da linha
+                                                                 
         code = re.sub(r'--.*$', '', code, flags=re.MULTILINE)
-        # Remove linhas que ficaram completamente em branco após a remoção
+                                                                          
         return "\n".join(line for line in code.splitlines() if line.strip())
 
-    # --- INÍCIO DA MODIFICAÇÃO ---
+                                   
     def remove_c_style_comments(self, c_code):
         """Remove comentários de linha C++ (//) e de bloco C (/*...*/) de um código."""
-        # Remove comentários em bloco /* ... */, incluindo os que se estendem por várias linhas
+                                                                                               
         code = re.sub(r'/\*.*?\*/', '', c_code, flags=re.DOTALL)
-        # Remove comentários de linha // ... até o final da linha
+                                                                 
         code = re.sub(r'//.*$', '', code, flags=re.MULTILINE)
-        # Remove linhas que ficaram completamente em branco após a remoção
+                                                                          
         return "\n".join(line for line in code.splitlines() if line.strip())
 
-    # --- FIM DA MODIFICAÇÃO ---
+                                
 
     def process_files(self, source_dir, extensions, log_file, ignored_dirs_str):
         self.update_log("Iniciando o processo de remoção de comentários...")
@@ -221,16 +221,16 @@ class CommentRemoverApp:
 
                                 cleaned_content = original_content
 
-                                # --- INÍCIO DA MODIFICAÇÃO ---
+                                                               
                                 f_lower = filename.lower()
                                 if f_lower.endswith('.py'):
                                     cleaned_content = self.remove_python_comments(original_content)
                                 elif f_lower.endswith('.sql'):
                                     cleaned_content = self.remove_sql_comments(original_content)
-                                # Adiciona a nova lógica para C/C++
+                                                                   
                                 elif f_lower.endswith(('.c', '.h', '.cpp', '.hpp')):
                                     cleaned_content = self.remove_c_style_comments(original_content)
-                                # --- FIM DA MODIFICAÇÃO ---
+                                                            
 
                                 if original_content != cleaned_content:
                                     with open(file_path, 'w', encoding='utf-8') as outfile:
@@ -264,7 +264,7 @@ class CommentRemoverApp:
         finally:
             self.root.after(0, lambda: self.process_button.config(state='normal'))
 
-    # Funções auxiliares mantidas para consistência da interface
+                                                                
     def copy_log_to_clipboard(self):
         try:
             log_content = self.log_text.get("1.0", tk.END).strip()
