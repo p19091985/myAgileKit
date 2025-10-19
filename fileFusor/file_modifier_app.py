@@ -11,14 +11,15 @@ import datetime
 
 class CommentRemoverApp:
     """
-    Uma aplicação para remover todos os comentários de arquivos .py e .sql
+    Uma aplicação para remover todos os comentários de arquivos .py, .sql, .c, .cpp, etc.
     diretamente no local. A operação modifica os arquivos originais e gera
     um log detalhado.
     """
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Removedor de Comentários v2.0")
+        # Título atualizado para refletir as novas capacidades
+        self.root.title("Removedor de Comentários v3.0 (.py, .sql, C/C++)")
         self.root.geometry("700x680")
         self.root.minsize(600, 600)
 
@@ -52,12 +53,24 @@ class CommentRemoverApp:
         ext_frame.pack(fill=tk.X, expand=True, pady=5)
 
         self.extension_vars = {}
-        target_extensions = ['.py', '.sql']
+
+        # --- INÍCIO DA MODIFICAÇÃO ---
+        # Adicionadas as extensões de C/C++
+        target_extensions = ['.py', '.sql', '.c', '.h', '.cpp', '.hpp']
+        num_columns = 4  # Ajustar o número de colunas para o layout
+
         for i, ext in enumerate(target_extensions):
-            var = tk.BooleanVar(value=True)
+            # MODIFICADO: value=True para value=False
+            var = tk.BooleanVar(value=False)
             cb = ttk.Checkbutton(ext_frame, text=ext, variable=var)
-            cb.grid(row=0, column=i, sticky=tk.W, padx=5, pady=2)
+
+            # Layout de grid flexível
+            row = i // num_columns
+            col = i % num_columns
+            cb.grid(row=row, column=col, sticky=tk.W, padx=5, pady=2)
+
             self.extension_vars[ext] = var
+        # --- FIM DA MODIFICAÇÃO ---
 
         ignore_frame = ttk.LabelFrame(parent, text="3. Pastas a Ignorar (separadas por vírgula)", padding="10")
         ignore_frame.pack(fill=tk.X, expand=True, pady=5)
@@ -164,6 +177,18 @@ class CommentRemoverApp:
         # Remove linhas que ficaram completamente em branco após a remoção
         return "\n".join(line for line in code.splitlines() if line.strip())
 
+    # --- INÍCIO DA MODIFICAÇÃO ---
+    def remove_c_style_comments(self, c_code):
+        """Remove comentários de linha C++ (//) e de bloco C (/*...*/) de um código."""
+        # Remove comentários em bloco /* ... */, incluindo os que se estendem por várias linhas
+        code = re.sub(r'/\*.*?\*/', '', c_code, flags=re.DOTALL)
+        # Remove comentários de linha // ... até o final da linha
+        code = re.sub(r'//.*$', '', code, flags=re.MULTILINE)
+        # Remove linhas que ficaram completamente em branco após a remoção
+        return "\n".join(line for line in code.splitlines() if line.strip())
+
+    # --- FIM DA MODIFICAÇÃO ---
+
     def process_files(self, source_dir, extensions, log_file, ignored_dirs_str):
         self.update_log("Iniciando o processo de remoção de comentários...")
         ignored_dirs_set = {'__pycache__'}
@@ -195,10 +220,17 @@ class CommentRemoverApp:
                                     original_content = infile.read()
 
                                 cleaned_content = original_content
-                                if filename.lower().endswith('.py'):
+
+                                # --- INÍCIO DA MODIFICAÇÃO ---
+                                f_lower = filename.lower()
+                                if f_lower.endswith('.py'):
                                     cleaned_content = self.remove_python_comments(original_content)
-                                elif filename.lower().endswith('.sql'):
+                                elif f_lower.endswith('.sql'):
                                     cleaned_content = self.remove_sql_comments(original_content)
+                                # Adiciona a nova lógica para C/C++
+                                elif f_lower.endswith(('.c', '.h', '.cpp', '.hpp')):
+                                    cleaned_content = self.remove_c_style_comments(original_content)
+                                # --- FIM DA MODIFICAÇÃO ---
 
                                 if original_content != cleaned_content:
                                     with open(file_path, 'w', encoding='utf-8') as outfile:
