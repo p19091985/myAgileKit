@@ -3,6 +3,7 @@
 *.log
 *.logs
 *.db
+*.txt
 
 /documentacao
 
