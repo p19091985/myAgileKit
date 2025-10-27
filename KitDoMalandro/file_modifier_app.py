@@ -8,7 +8,6 @@ import tokenize
 import io
 import datetime
 
-
 class CommentRemoverApp:
     """
     Uma aplicação para remover todos os comentários de arquivos .py, .sql, .c, .cpp, etc.
@@ -19,7 +18,6 @@ class CommentRemoverApp:
     def __init__(self, root):
         self.root = root
 
-        ### MUDANÇA ### - Título da janela atualizado para v3.4 e Jinja2
         self.root.title("Removedor de Comentários v3.4 (.py, .sql, C/C++, JS, CSS, HTML/Jinja2)")
         self.root.geometry("700x730")
         self.root.minsize(600, 650)
@@ -185,13 +183,11 @@ class CommentRemoverApp:
         code = re.sub(r'//.*$', '', c_code, flags=re.MULTILINE)
         return "\n".join(line for line in code.splitlines() if line.strip())
 
-    ### MUDANÇA ### - Função atualizada para remover comentários HTML e Jinja2
     def remove_html_comments(self, html_code):
         """Remove comentários de HTML e {#...#} de Jinja2."""
-        # Remove comentários HTML ()
+                                    
         code = re.sub(r'', '', html_code, flags=re.DOTALL)
-        # Remove comentários Jinja2 ({# ... #})
-        # Precisamos escapar as chaves: \{# e #\}
+
         code = re.sub(r'\{#.*?#\}', '', code, flags=re.DOTALL)
         return "\n".join(line for line in code.splitlines() if line.strip())
 
@@ -240,20 +236,12 @@ class CommentRemoverApp:
                                 elif f_lower.endswith(('.c', '.h', '.cpp', '.hpp', '.js', '.css')):
                                     cleaned_content = self.remove_c_style_comments(original_content)
                                 elif f_lower.endswith('.html'):
-                                    # Esta função agora lida com HTML e Jinja2
+                                                                              
                                     cleaned_content = self.remove_html_comments(original_content)
 
-                                # <--- LÓGICA DE QUEBRA DE LINHA ---
                                 if reduce_lines:
-                                    # Substitui 3 ou mais quebras de linha
-                                    # (mesmo que contenham espaços/tabs)
-                                    # por apenas 2 quebras de linha (uma linha em branco).
 
-                                    # <--- ESTA É A LINHA MODIFICADA ---
                                     cleaned_content = re.sub(r'(\s*?\n){3,}', '\n\n', cleaned_content)
-                                    # <--- FIM DA MODIFICAÇÃO ---
-
-                                # <--- FIM DA LÓGICA DE QUEBRA DE LINHA ---
 
                                 if original_content != cleaned_content:
                                     with open(file_path, 'w', encoding='utf-8') as outfile:
@@ -307,7 +295,6 @@ class CommentRemoverApp:
         self.log_text.insert(tk.END, message + "\n")
         self.log_text.config(state='disabled')
         self.log_text.see(tk.END)
-
 
 if __name__ == "__main__":
     root = tk.Tk()

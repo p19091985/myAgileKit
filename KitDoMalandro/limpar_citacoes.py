@@ -3,41 +3,23 @@ import argparse
 import os
 import sys
 
-
-                                                                               
-                                              
-                                                                               
 def remover_citacoes(texto):
     """
     Remove marcações de citação e retorna o texto limpo e a contagem de remoções.
     (Atualizado para incluir [cite_end] e tags escapadas com \ em Markdown)
     """
 
-                                                  
-     
-                          
-                                                                                
     padrao_original = r'\[\s*cite\s*\\?:\s*.*?\]'
 
-                                     
-                                                                                 
     padrao_start = r'\[\s*cite\\?_start\s*\]'
     padrao_end = r'\[\s*cite\\?_end\s*\]'
-     
-                                               
 
-                                                      
-                                                           
     padrao_combinado = f"({padrao_original})|({padrao_start})|({padrao_end})"
 
     texto_limpo, num_remocoes = re.subn(padrao_combinado, '', texto, flags=re.IGNORECASE)
 
     return texto_limpo, num_remocoes
 
-
-                                                                               
-                                                                  
-                                                                               
 def limpar_arquivo_inplace(caminho_arquivo):
     """
     Função auxiliar para o modo pasta. Lê, limpa e salva um arquivo in-place.
@@ -53,7 +35,6 @@ def limpar_arquivo_inplace(caminho_arquivo):
 
     conteudo_limpo, contagem = remover_citacoes(conteudo_original)
 
-                                                       
     if contagem > 0 and conteudo_original != conteudo_limpo:
         try:
             with open(caminho_arquivo, 'w', encoding='utf-8') as f:
@@ -65,27 +46,19 @@ def limpar_arquivo_inplace(caminho_arquivo):
             print(f"ERRO ao salvar {caminho_arquivo}: {e}", file=sys.stderr)
             return 0
 
-    return 0                   
+    return 0
 
-
-                                                                               
-                                                       
-                                                                               
 def processar_pasta_recursivamente(pasta_path):
     """
     Varre uma pasta recursivamente e limpa os arquivos de texto válidos.
     """
 
-                                                                 
-                                       
     extensoes_validas = (
                    
         '.txt', '.md', '.py', '.html', '.xml', '.tex',
 
-                                  
         '.c', '.h', '.sql',
 
-                                                                          
         '.js',
         '.java',
         '.cs',
@@ -119,10 +92,6 @@ def processar_pasta_recursivamente(pasta_path):
     print(f"Total de arquivos modificados: {total_arquivos_modificados}")
     print(f"Total de citações removidas: {total_remocoes_geral}")
 
-
-                                                                               
-                                                           
-                                                                               
 def processar_arquivo_unico(args):
     """
     Toda a lógica original do seu script para processar um único arquivo.
@@ -170,23 +139,17 @@ def processar_arquivo_unico(args):
         print(f"ERRO: Ocorreu um erro ao salvar o arquivo: {e}")
         sys.exit(1)
 
-
-                                                                               
-                                                 
-                                                                               
 def main():
     parser = argparse.ArgumentParser(
         description="Remove marcações de citação de arquivos de texto ou pastas.",
         formatter_class=argparse.RawTextHelpFormatter
     )
 
-                                       
     parser.add_argument(
         "-p", "--pasta",
         help="Opcional: O caminho para a PASTA a ser limpa recursivamente."
     )
 
-                                                               
     parser.add_argument(
         "arquivo_entrada",
         nargs='?',                           
@@ -197,7 +160,6 @@ def main():
 
     args = parser.parse_args()
 
-                                      
     if args.pasta:
                     
         if args.arquivo_entrada or args.output or args.in_place:
@@ -216,7 +178,6 @@ def main():
         print("Erro: Você deve fornecer um 'arquivo_entrada' ou a opção '--pasta'.")
         parser.print_help()
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

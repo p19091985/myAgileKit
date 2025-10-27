@@ -5,7 +5,6 @@ import datetime
 import threading
 import sys
 
-
 class FileMergerApp:
     """
     Uma aplicação com interface gráfica para concatenar múltiplos arquivos de um
@@ -66,7 +65,6 @@ class FileMergerApp:
         ignore_frame = ttk.LabelFrame(parent, text="3. Pastas a Ignorar (separadas por vírgula)", padding="10")
         ignore_frame.pack(fill=tk.X, expand=True, pady=5)
 
-                                                               
         self.ignore_dirs_var = tk.StringVar(value="node_modules, dist, build, target, out, .venv, venv, .git")
         ignore_entry = ttk.Entry(ignore_frame, textvariable=self.ignore_dirs_var)
         ignore_entry.pack(fill=tk.X, expand=True)
@@ -171,12 +169,10 @@ class FileMergerApp:
 
         self.process_button.config(state='disabled')
 
-                                                      
         self.log_text.config(state='normal')
         self.log_text.delete("1.0", tk.END)
         self.log_text.config(state='disabled')
 
-                                
         thread = threading.Thread(target=self.process_files,
                                   args=(source_dir, selected_extensions, output_file, ignored_dirs_str))
         thread.daemon = True
@@ -185,9 +181,6 @@ class FileMergerApp:
     def process_files(self, source_dir, extensions, output_file, ignored_dirs_str):
         """Processa os arquivos em uma thread separada."""
 
-                                                                       
-
-                                                   
         self.schedule_log_update("Iniciando o processo...")
         self.schedule_log_update(f"Extensões a serem buscadas: {', '.join(extensions)}")
 
@@ -212,7 +205,6 @@ class FileMergerApp:
                             file_path = os.path.join(root, filename)
                             relative_path = os.path.relpath(file_path, source_dir)
 
-                                             
                             self.schedule_log_update(f"Processando: {relative_path}")
 
                             try:
@@ -235,20 +227,17 @@ class FileMergerApp:
             self.schedule_log_update(f"\nPROCESSO CONCLUÍDO!")
             self.schedule_log_update(f"Total de {file_count} arquivos foram concatenados.")
 
-                                                                 
             self.root.after(0, lambda: messagebox.showinfo("Sucesso",
                                                            f"Processo concluído!\n{file_count} arquivos foram salvos em:\n{output_file}"))
 
         except Exception as e:
             self.schedule_log_update(f"!! ERRO GERAL: {e}")
 
-                                                              
             self.root.after(0, lambda: messagebox.showerror("Erro", f"Ocorreu um erro inesperado: {e}"))
 
         finally:
                                                                  
             self.root.after(0, lambda: self.process_button.config(state='normal'))
-
 
 if __name__ == "__main__":
     root = tk.Tk()

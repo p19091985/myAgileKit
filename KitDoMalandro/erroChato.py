@@ -2,7 +2,6 @@ import os
 import re
 import sys
 
-
 def refatorar_codigo_streamlit(root_dir):
     """
     Percorre recursivamente um diretório e substitui os argumentos
@@ -10,8 +9,6 @@ def refatorar_codigo_streamlit(root_dir):
     'use_container_width=False' por 'width="content"'.
     """
 
-                                                     
-                                                                         
     pattern_true = re.compile(r"use_container_width\s*=\s*True")
     replacement_true = "width='stretch'"
 
@@ -37,11 +34,9 @@ def refatorar_codigo_streamlit(root_dir):
 
                     modified_content = content
 
-                                             
                     modified_content = pattern_true.sub(replacement_true, modified_content)
                     modified_content = pattern_false.sub(replacement_false, modified_content)
 
-                                                                      
                     if modified_content != content:
                         with open(file_path, 'w', encoding='utf-8') as f:
                             f.write(modified_content)
@@ -55,13 +50,10 @@ def refatorar_codigo_streamlit(root_dir):
     print(f"Arquivos .py verificados: {arquivos_verificados}")
     print(f"Arquivos .py modificados: {arquivos_modificados}")
 
-
 if __name__ == "__main__":
-                                                                  
-                                                                                       
+
     start_directory = '.'
 
-                                                                           
     if len(sys.argv) > 1:
         start_directory = sys.argv[1]
 
