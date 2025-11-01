@@ -19,26 +19,19 @@ Lógica de Duas Passagens:
     - 'use_container_width=False' é SUBSTITUÍDO por 'width="content"'.
 """
 
-# --- Lógica de Refatoração (Padrão Ouro) ---
-
-# Regex para st.altair_chart(..., use_container_width=True)
 pattern_altair = re.compile(
-    r"(st\.altair_chart\([^\)]*?)"  # (1) Início da chamada
-    r"(,?\s*use_container_width\s*=\s*True\s*,?)"  # (2) O parâmetro (e vírgulas)
-    r"([^\)]*\))",  # (3) O resto da chamada
+    r"(st\.altair_chart\([^\)]*?)"                         
+    r"(,?\s*use_container_width\s*=\s*True\s*,?)"                                
+    r"([^\)]*\))",                          
     re.IGNORECASE
 )
-replacement_altair = r"\1\3"  # Remove o grupo (2)
+replacement_altair = r"\1\3"
 
-# Padrões gerais para outros elementos
 pattern_true = re.compile(r"use_container_width\s*=\s*True", re.IGNORECASE)
 replacement_true = "width='stretch'"
 
 pattern_false = re.compile(r"use_container_width\s*=\s*False", re.IGNORECASE)
 replacement_false = "width='content'"
-
-
-# --- Classe da Aplicação GUI ---
 
 class RefactorGUI(tk.Tk):
 
@@ -49,10 +42,9 @@ class RefactorGUI(tk.Tk):
         self.geometry("800x600")
         self.minsize(600, 400)
 
-        # Tenta usar um tema TTK mais moderno
         try:
             style = ttk.Style(self)
-            style.theme_use('clam')  # 'clam', 'alt', 'default', 'classic'
+            style.theme_use('clam')                                       
         except tk.TclError:
             print("Tema 'clam' não encontrado, usando padrão.")
 
@@ -66,21 +58,17 @@ class RefactorGUI(tk.Tk):
     def create_widgets(self):
         """Cria a estrutura principal da interface."""
 
-        # --- Configuração do Layout Principal ---
-        # Faz com que o frame principal expanda com a janela
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
 
         main_frame = ttk.Frame(self, padding="10")
         main_frame.grid(row=0, column=0, sticky="nsew")
 
-        # Configura as colunas e linhas do main_frame
-        main_frame.columnconfigure(0, weight=1)  # Coluna da lista
-        main_frame.columnconfigure(1, weight=0)  # Coluna dos botões
-        main_frame.rowconfigure(1, weight=1)  # Linha da lista
-        main_frame.rowconfigure(3, weight=2)  # Linha do log
+        main_frame.columnconfigure(0, weight=1)                   
+        main_frame.columnconfigure(1, weight=0)                     
+        main_frame.rowconfigure(1, weight=1)                  
+        main_frame.rowconfigure(3, weight=2)
 
-        # --- 1. Seleção de Arquivos/Pastas ---
         ttk.Label(main_frame, text="Arquivos e Pastas para Processar:",
                   font=("-weight bold")).grid(row=0, column=0, columnspan=2, sticky="w")
 
@@ -96,7 +84,6 @@ class RefactorGUI(tk.Tk):
         list_scrollbar.grid(row=0, column=1, sticky="ns")
         self.path_listbox.config(yscrollcommand=list_scrollbar.set)
 
-        # --- 2. Botões de Ação (Seleção) ---
         button_frame = ttk.Frame(main_frame)
         button_frame.grid(row=1, column=1, sticky="nw")
 
@@ -110,14 +97,12 @@ class RefactorGUI(tk.Tk):
         self.btn_clear_list = ttk.Button(button_frame, text="Limpar Lista", command=self.clear_list)
         self.btn_clear_list.pack(fill="x", pady=2)
 
-        # --- 3. Botão de Execução ---
         self.run_button = ttk.Button(main_frame, text="🚀 EXECUTAR REFATORAÇÃO 🚀", command=self.start_refactor,
                                      style="Accent.TButton")
         self.run_button.grid(row=2, column=1, sticky="sew", padx=0, pady=5)
         style = ttk.Style(self)
         style.configure("Accent.TButton", font=("-weight bold"), padding=10)
 
-        # --- 4. Log de Saída ---
         ttk.Label(main_frame, text="Log de Saída:",
                   font=("-weight bold")).grid(row=2, column=0, sticky="sw", pady=(5, 0))
 
@@ -129,11 +114,8 @@ class RefactorGUI(tk.Tk):
         self.log_area = scrolledtext.ScrolledText(log_frame, wrap=tk.WORD, state="disabled", height=15)
         self.log_area.grid(row=0, column=0, sticky="nsew")
 
-        # --- 5. Status Bar ---
         self.status_label = ttk.Label(main_frame, text="Status: Ocioso", relief="sunken", padding=5)
         self.status_label.grid(row=4, column=0, columnspan=2, sticky="sew", pady=(5, 0))
-
-    # --- Funções de Callback ---
 
     def select_files(self):
         """Abre diálogo para selecionar arquivos .py."""
@@ -167,7 +149,7 @@ class RefactorGUI(tk.Tk):
         self.path_listbox.delete(0, tk.END)
         sorted_paths = sorted(list(self.selected_paths))
         for path in sorted_paths:
-            # Adiciona um marcador se for diretório
+                                                   
             marker = "[PASTA] " if os.path.isdir(path) else ""
             self.path_listbox.insert(tk.END, f"{marker}{path}")
 
@@ -194,7 +176,7 @@ class RefactorGUI(tk.Tk):
                     self.log(message)
 
         finally:
-            self.after(100, self.process_log_queue)  # Re-agenda a verificação
+            self.after(100, self.process_log_queue)                           
 
     def toggle_controls(self, enabled: bool):
         """Ativa ou desativa os botões durante a execução."""
@@ -215,18 +197,14 @@ class RefactorGUI(tk.Tk):
             tk.messagebox.showwarning("Nada Selecionado", "Por favor, selecione arquivos ou pastas para processar.")
             return
 
-        # Limpa o log e desativa controles
         self.log_area.config(state="normal")
         self.log_area.delete("1.0", tk.END)
         self.log_area.config(state="disabled")
         self.toggle_controls(False)
         self.status_label.config(text="Status: Iniciando...")
 
-        # Inicia a thread de trabalho
         self.thread = threading.Thread(target=self.run_refactor_logic, daemon=True)
         self.thread.start()
-
-    # --- Lógica de Trabalho (Executada na Thread) ---
 
     def run_refactor_logic(self):
         """Lógica principal de varredura e refatoração (executa em background)."""
@@ -235,7 +213,7 @@ class RefactorGUI(tk.Tk):
 
         arquivos_modificados = 0
         arquivos_verificados = 0
-        paths_to_process = self.selected_paths.copy()  # Copia para thread-safety
+        paths_to_process = self.selected_paths.copy()                            
 
         for path in paths_to_process:
             if os.path.isfile(path):
@@ -265,7 +243,7 @@ class RefactorGUI(tk.Tk):
         self.log_queue.put(f"Arquivos .py modificados: {arquivos_modificados}")
         self.log_queue.put(
             f"STATUS: Concluído (Verificados: {arquivos_verificados}, Modificados: {arquivos_modificados})")
-        self.log_queue.put("---THREAD_DONE---")  # Sinaliza para reativar botões
+        self.log_queue.put("---THREAD_DONE---")                                 
 
     def processar_arquivo_thread(self, file_path: str) -> bool:
         """
@@ -278,10 +256,8 @@ class RefactorGUI(tk.Tk):
 
             modified_content = content
 
-            # --- Passagem 1: Corrigir st.altair_chart ---
             modified_content = pattern_altair.sub(replacement_altair, modified_content)
 
-            # --- Passagem 2: Corrigir outros elementos ---
             modified_content = pattern_true.sub(replacement_true, modified_content)
             modified_content = pattern_false.sub(replacement_false, modified_content)
 
@@ -296,8 +272,6 @@ class RefactorGUI(tk.Tk):
 
         return False
 
-
-# --- Ponto de Entrada ---
 if __name__ == "__main__":
     app = RefactorGUI()
     app.mainloop()
