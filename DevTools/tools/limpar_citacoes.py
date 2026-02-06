@@ -89,7 +89,6 @@ def main():
         if args.in_place:
             limpar_arquivo_inplace(args.arquivo_entrada, args.log)
         elif args.output:
-            # Output mode: no backup needed as it's a new file
             try:
                 with open(args.arquivo_entrada, 'r', encoding='utf-8') as f: content = f.read()
                 clean, cnt = remover_citacoes(content)
@@ -98,7 +97,6 @@ def main():
             except Exception as e:
                 log(f"Erro: {e}", args.log)
         else:
-            # Just print filename suffix
             base, ext = os.path.splitext(args.arquivo_entrada)
             out = f'{base}_limpo{ext}'
             try:

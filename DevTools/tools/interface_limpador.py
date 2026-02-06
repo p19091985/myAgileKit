@@ -5,7 +5,6 @@ import sys
 import os
 import datetime
 
-# Import shared GUI utils
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
 
@@ -21,7 +20,6 @@ class LimparCitacoesApp(tk.Tk):
         self.create_widgets()
 
     def create_widgets(self):
-        # Header
         gui_utils.create_header(self, "Interface Limpador", "Remove citações [cite] (Cria backups .bak automaticamente)")
 
         main_pad = ttk.Frame(self, padding=20)
@@ -30,17 +28,14 @@ class LimparCitacoesApp(tk.Tk):
         nb = ttk.Notebook(main_pad)
         nb.pack(fill=tk.BOTH, expand=True)
 
-        # Aba 1: Arquivo Único
         frame_arquivo = ttk.Frame(nb, padding=20)
         nb.add(frame_arquivo, text=' Modo Arquivo ')
         self.montar_aba_arquivo(frame_arquivo)
 
-        # Aba 2: Pasta Recursiva
         frame_pasta = ttk.Frame(nb, padding=20)
         nb.add(frame_pasta, text=' Modo Diretório ')
         self.montar_aba_pasta(frame_pasta)
         
-        # Log view
         log_frame = ttk.LabelFrame(main_pad, text="Log de Execução", padding=10)
         log_frame.pack(fill='both', expand=True, pady=10)
         self.log_text = tk.Text(log_frame, height=8, font=gui_utils.FONT_CODE)
@@ -59,7 +54,6 @@ class LimparCitacoesApp(tk.Tk):
 
         ttk.Separator(parent, orient='horizontal').pack(fill='x', pady=20)
         
-        # Opções
         self.mode_var = tk.StringVar(value='output')
         ttk.Radiobutton(parent, text='Salvar em novo arquivo (padrão)', variable=self.mode_var, value='output', command=self.toggle_output_entry).pack(anchor='w', pady=2)
         

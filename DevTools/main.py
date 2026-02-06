@@ -5,7 +5,6 @@ import sys
 import subprocess
 from typing import List, Tuple
 
-# Import shared GUI utils
 sys.path.append(os.path.join(os.path.dirname(__file__), 'tools'))
 import gui_utils
 
@@ -13,17 +12,13 @@ class DevToolsLauncher(tk.Tk):
     def __init__(self):
         super().__init__()
         
-        # Setup Window (Size, Center, Theme)
         gui_utils.setup_window(self, "DevTools - Unified Launcher")
 
-        # Layout principal
         self.columnconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1) # Tool area expands
+        self.rowconfigure(1, weight=1)
 
-        # Standard Header
         gui_utils.create_header(self, "DevTools", "Selecione uma ferramenta para continuar")
 
-        # --- Tool List Area ---
         self.tools_list: List[Tuple[str, str, str]] = [
             ("Corretor Streamlit", "corretor_streamlit.py", "Refatora scripts Streamlit corrigindo avisos de depreciação (use_container_width)."),
             ("File Modifier", "file_modifier.py", "Ferramenta para modificação em massa de arquivos com suporte a 30+ linguagens."),
@@ -33,7 +28,6 @@ class DevToolsLauncher(tk.Tk):
             ("Limpar Citações (CLI)", "limpar_citacoes.py", "Ferramenta de linha de comando para limpar citações em textos (Executa no terminal)."),
         ]
 
-        # Canvas for Scrolling
         self.canvas_frame = ttk.Frame(self)
         self.canvas_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
@@ -58,7 +52,6 @@ class DevToolsLauncher(tk.Tk):
 
         self.create_tool_cards()
 
-        # Standard Footer
         gui_utils.create_footer(self, "v1.0 - DevTools Unified Launcher")
 
     def _on_mousewheel(self, event):
@@ -72,19 +65,16 @@ class DevToolsLauncher(tk.Tk):
             card = ttk.Frame(self.scrollable_frame, style='Card.TFrame', padding=15)
             card.pack(fill="x", expand=True, padx=10, pady=5)
             
-            # Info
-            info_frame = ttk.Frame(card, style='Card.TFrame') # Inherit white bg
+            info_frame = ttk.Frame(card, style='Card.TFrame')
             info_frame.pack(side="left", fill="both", expand=True)
 
             ttk.Label(info_frame, text=name, font=('Segoe UI', 12, 'bold'), background='white').pack(anchor="w")
             ttk.Label(info_frame, text=desc, foreground='#555', wraplength=550, background='white').pack(fill="x", anchor="w")
 
-            # Button
             btn = ttk.Button(card, text="Abrir", style='Primary.TButton', command=lambda f=filename: self.launch_tool(f))
             btn.pack(side="right", padx=10)
 
     def launch_tool(self, filename: str):
-        # We assume tools are in 'tools/' subdirectory relative to this script
         script_path = os.path.join(os.path.dirname(__file__), "tools", filename)
         
         if not os.path.exists(script_path):
