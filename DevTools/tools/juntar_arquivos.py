@@ -6,7 +6,6 @@ import threading
 import sys
 import logging
 
-# Import shared GUI utils
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
 
@@ -25,7 +24,6 @@ class FileMergerApp:
         main_pad = ttk.Frame(parent, padding=10)
         main_pad.pack(fill=tk.BOTH, expand=True)
         
-        # 1. Source
         source_frame = ttk.LabelFrame(main_pad, text='Diretório de Origem', padding='10')
         source_frame.pack(fill=tk.X, pady=5)
         
@@ -33,7 +31,6 @@ class FileMergerApp:
         ttk.Entry(source_frame, textvariable=self.source_dir_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         ttk.Button(source_frame, text='Procurar...', command=self.browse_source_directory).pack(side=tk.LEFT)
 
-        # 2. Extensions
         ext_frame = ttk.LabelFrame(main_pad, text='Tipos de Arquivo', padding='10')
         ext_frame.pack(fill=tk.X, pady=5)
         
@@ -49,24 +46,20 @@ class FileMergerApp:
             cb.grid(row=i // 5, column=i % 5, sticky='w', padx=5, pady=2)
             self.extension_vars[ext] = var
 
-        # 3. Ignore
         ignore_frame = ttk.LabelFrame(main_pad, text='Diretórios Ignorados', padding='10')
         ignore_frame.pack(fill=tk.X, pady=5)
         self.ignore_dirs_var = tk.StringVar(value='node_modules, dist, build, target, out, .venv, venv, .git, __pycache__')
         ttk.Entry(ignore_frame, textvariable=self.ignore_dirs_var).pack(fill=tk.X)
 
-        # 4. Output
         output_frame = ttk.LabelFrame(main_pad, text='Arquivo de Saída', padding='10')
         output_frame.pack(fill=tk.X, pady=5)
         self.output_file_var = tk.StringVar()
         ttk.Entry(output_frame, textvariable=self.output_file_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         ttk.Button(output_frame, text='Salvar Como...', command=self.browse_save_file).pack(side=tk.LEFT)
 
-        # Run
         self.process_button = ttk.Button(main_pad, text='Iniciar Concatenação', command=self.start_processing_thread, style='Primary.TButton')
         self.process_button.pack(pady=10, fill=tk.X, ipady=5)
 
-        # Log
         log_frame = ttk.LabelFrame(main_pad, text='Log de Execução', padding='10')
         log_frame.pack(fill='both', expand=True, pady=5)
         
@@ -108,7 +101,6 @@ class FileMergerApp:
         if not source_dir or not output_file: return messagebox.showerror('Erro', 'Preencha todos os campos.')
         if not exts: return messagebox.showerror('Erro', 'Selecione extensões.')
         
-        # Setup Logger (Output file + .log)
         log_file = output_file + ".log"
         self.logger = gui_utils.setup_logger("Merger", log_file, self.log_text)
 

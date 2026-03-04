@@ -9,11 +9,9 @@ import io
 import datetime
 import logging
 
-# Import shared GUI utils
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
 
-# --- LISTA DE LINGUAGENS E EXTENSÕES (Mantida) ---
 SUPPORTED_LANGUAGES = {
     'C': (['.c'], 'c_style'), 'C++': (['.cpp', '.cc', '.cxx', '.h', '.hpp'], 'c_style'), 'C#': (['.cs'], 'c_style'),
     'Java': (['.java'], 'c_style'), 'JavaScript': (['.js', '.jsx', '.mjs'], 'c_style'), 'TypeScript': (['.ts', '.tsx'], 'c_style'),
@@ -63,7 +61,6 @@ class CommentRemoverApp:
         main_pad = ttk.Frame(parent, padding=10)
         main_pad.pack(fill=tk.BOTH, expand=True)
 
-        # 1. Source Directory
         source_frame = ttk.LabelFrame(main_pad, text='Diretório de Origem', padding='10')
         source_frame.pack(fill=tk.X, expand=False, pady=(0, 5))
         
@@ -74,7 +71,6 @@ class CommentRemoverApp:
         browse_source_btn = ttk.Button(source_frame, text='Procurar...', command=self.browse_source_directory)
         browse_source_btn.pack(side=tk.LEFT)
 
-        # 2. Extensions (Scrollable)
         ext_frame_container = ttk.LabelFrame(main_pad, text='Filtro de Linguagens', padding='10')
         ext_frame_container.pack(fill=tk.BOTH, expand=True, pady=5)
         
@@ -97,19 +93,16 @@ class CommentRemoverApp:
             cb.grid(row=row, column=col, sticky=tk.W, padx=10, pady=2)
             self.extension_vars[lang] = var
 
-        # 3. Ignored Dirs
         ignore_frame = ttk.LabelFrame(main_pad, text='Diretórios Ignorados (separados por vírgula)', padding='10')
         ignore_frame.pack(fill=tk.X, expand=False, pady=5)
         self.ignore_dirs_var = tk.StringVar(value='.idea, .vscode, .vs, venv, .venv, env, node_modules, dist, build, target, out, .git, bin, obj, __pycache__')
         ttk.Entry(ignore_frame, textvariable=self.ignore_dirs_var).pack(fill=tk.X, expand=True)
 
-        # 4. Options
         options_frame = ttk.LabelFrame(main_pad, text='Opções', padding='10')
         options_frame.pack(fill=tk.X, expand=False, pady=5)
         self.reduce_line_breaks_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(options_frame, text='Reduzir múltiplas linhas em branco (2+) para apenas uma', variable=self.reduce_line_breaks_var).pack(side=tk.LEFT, padx=5)
 
-        # 5. Log File
         log_file_frame = ttk.LabelFrame(main_pad, text='Arquivo de Log', padding='10')
         log_file_frame.pack(fill=tk.X, expand=False, pady=5)
         
@@ -117,11 +110,9 @@ class CommentRemoverApp:
         ttk.Entry(log_file_frame, textvariable=self.log_file_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         ttk.Button(log_file_frame, text='Salvar Log Como...', command=self.browse_log_file).pack(side=tk.LEFT)
 
-        # Process Button
         self.process_button = ttk.Button(main_pad, text='Iniciar Remoção', command=self.start_processing_thread, style='Primary.TButton')
         self.process_button.pack(pady=10, fill=tk.X, ipady=5)
         
-        # Log Area
         log_frame = ttk.LabelFrame(main_pad, text='Log de Execução', padding='10')
         log_frame.pack(fill='both', expand=True, pady=5)
         
@@ -172,7 +163,6 @@ class CommentRemoverApp:
         if not messagebox.askyesno('Confirmação', warning_message, icon='warning'):
             return
 
-        # Setup Logger
         self.logger = gui_utils.setup_logger("FileModifier", log_file, self.log_text)
 
         self.process_button.config(state='disabled')
@@ -180,7 +170,6 @@ class CommentRemoverApp:
         thread.daemon = True
         thread.start()
 
-    # --- LÓGICA DE REMOÇÃO (Mantida Original) ---
     def remove_python_comments(self, source_code):
         try:
             tokens = tokenize.generate_tokens(io.StringIO(source_code).readline)
@@ -202,7 +191,7 @@ class CommentRemoverApp:
         elif strategy == 'doubledash_style': return self.generic_regex_cleaner(content, r'--.*$', None)
         elif strategy == 'quote_style': return self.generic_regex_cleaner(content, r"'.*$", None)
         elif strategy == 'semicolon_style': return self.generic_regex_cleaner(content, r';.*$', None)
-        elif strategy == 'batch_style': # Removendo detalhe...
+        elif strategy == 'batch_style':
              content = re.sub(r'^\s*REM.*$', '', content, flags=re.MULTILINE | re.IGNORECASE)
              content = re.sub(r'^\s*::.*$', '', content, flags=re.MULTILINE)
              return content
@@ -251,7 +240,6 @@ class CommentRemoverApp:
                             cleaned = re.sub(r'(\s*?\n){3,}', '\n\n', cleaned)
                         
                         if original != cleaned:
-                            # Create Backup
                             gui_utils.create_backup(file_path, self.logger)
                             
                             with open(file_path, 'w', encoding='utf-8') as f:

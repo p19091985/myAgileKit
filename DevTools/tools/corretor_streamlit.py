@@ -7,7 +7,6 @@ import threading
 from typing import Set
 import datetime
 
-# Import shared GUI utils
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
 
@@ -34,16 +33,15 @@ class RefactorGUI(tk.Tk):
         gui_utils.create_header(self, "Corretor Streamlit", "Corrige deprecações como 'use_container_width'")
 
         self.columnconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1) # Main content expands
+        self.rowconfigure(1, weight=1)
 
         main_frame = ttk.Frame(self, padding='10')
         main_frame.pack(fill='both', expand=True)
         main_frame.columnconfigure(0, weight=1)
-        main_frame.columnconfigure(1, weight=0) # Button column
-        main_frame.rowconfigure(1, weight=1) # Listbox expands
-        main_frame.rowconfigure(3, weight=1) # Log expands
+        main_frame.columnconfigure(1, weight=0)
+        main_frame.rowconfigure(1, weight=1)
+        main_frame.rowconfigure(3, weight=1)
 
-        # Input Section
         ttk.Label(main_frame, text='Seleção de Fonte:', font=('Segoe UI', 10, 'bold')).grid(row=0, column=0, columnspan=2, sticky='w', pady=(0, 5))
         
         list_frame = ttk.Frame(main_frame)
@@ -56,7 +54,6 @@ class RefactorGUI(tk.Tk):
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.path_listbox.config(yscrollcommand=scrollbar.set)
 
-        # Buttons
         button_frame = ttk.Frame(main_frame)
         button_frame.grid(row=1, column=1, sticky='n')
         
@@ -69,11 +66,9 @@ class RefactorGUI(tk.Tk):
         self.btn_copy_log = ttk.Button(button_frame, text='Copiar Log', command=self.copy_log)
         self.btn_copy_log.pack(fill='x', pady=2)
 
-        # Run Button
         self.run_button = ttk.Button(main_frame, text='Iniciar Correção', command=self.start_refactor, style='Primary.TButton')
         self.run_button.grid(row=2, column=1, sticky='sew', padx=0, pady=5)
 
-        # Log Section
         log_frame = ttk.LabelFrame(main_frame, text='Log de Execução', padding='5')
         log_frame.grid(row=3, column=0, columnspan=2, sticky='nsew', pady=5)
         
@@ -84,7 +79,6 @@ class RefactorGUI(tk.Tk):
         log_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         self.log_area.config(yscrollcommand=log_scroll.set)
         
-        # Status Bar
         self.status_label = ttk.Label(self, text='Status: Aguardando Início', relief='sunken', padding=5, background='#e0e0e0', anchor='w')
         self.status_label.grid(row=2, column=0, sticky='ew')
 
@@ -142,7 +136,6 @@ class RefactorGUI(tk.Tk):
             messagebox.showwarning('Nada Selecionado', 'Por favor, selecione arquivos ou pastas para processar.')
             return
         
-        # Setup Logger
         ts = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"Corretor_Log_{ts}.log")
         self.logger = gui_utils.setup_logger("Corretor", log_file, self.log_area)
@@ -199,12 +192,10 @@ class RefactorGUI(tk.Tk):
             
             modified_content = content
             
-            # Count matches for detailed logging
             matches_true = len(pattern_true.findall(content))
             matches_false = len(pattern_false.findall(content))
             
             if matches_true > 0 or matches_false > 0:
-                # Create Backup
                 gui_utils.create_backup(file_path, self.logger)
                 
                 modified_content = pattern_true.sub(replacement_true, modified_content)

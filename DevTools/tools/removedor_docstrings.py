@@ -7,7 +7,6 @@ import datetime
 import ast
 import re
 
-# Import shared GUI utils
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
 
@@ -65,31 +64,26 @@ class DocstringRemoverApp:
         main_pad = ttk.Frame(parent, padding=10)
         main_pad.pack(fill=tk.BOTH, expand=True)
 
-        # 1. Source
         source_frame = ttk.LabelFrame(main_pad, text='Diretório Alvo', padding='10')
         source_frame.pack(fill=tk.X, pady=(0, 5))
         self.source_dir_var = tk.StringVar()
         ttk.Entry(source_frame, textvariable=self.source_dir_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
         ttk.Button(source_frame, text='Procurar...', command=self.browse_source_directory).pack(side=tk.LEFT)
 
-        # 2. Ignored Dirs
         ignore_frame = ttk.LabelFrame(main_pad, text='Diretórios Ignorados', padding='10')
         ignore_frame.pack(fill=tk.X, pady=5)
         self.ignore_dirs_var = tk.StringVar(value='.idea, .vscode, .vs, venv, .venv, env, node_modules, dist, build, target, out, .git, bin, obj, __pycache__')
         ttk.Entry(ignore_frame, textvariable=self.ignore_dirs_var).pack(fill=tk.X)
 
-        # 3. Output Log
         log_frame = ttk.LabelFrame(main_pad, text='Arquivo de Log', padding='10')
         log_frame.pack(fill=tk.X, pady=5)
         self.log_file_var = tk.StringVar()
         ttk.Entry(log_frame, textvariable=self.log_file_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
         ttk.Button(log_frame, text='Salvar Como...', command=self.browse_log_file).pack(side=tk.LEFT)
 
-        # Run
         self.process_button = ttk.Button(main_pad, text='Iniciar Remoção', command=self.start_processing_thread, style='Primary.TButton')
         self.process_button.pack(pady=10, fill=tk.X, ipady=5)
 
-        # Log
         log_disp = ttk.LabelFrame(main_pad, text='Log de Execução', padding='10')
         log_disp.pack(fill='both', expand=True, pady=5)
         
@@ -119,7 +113,6 @@ class DocstringRemoverApp:
         if not messagebox.askyesno('Atenção', f"Isso modificará arquivos em: {src}\nBackups (.bak) serão criados.\nContinuar?", icon='warning'): return
         
         self.process_button.config(state='disabled')
-        # Setup Logger
         self.logger = gui_utils.setup_logger("DocstringRemover", log, self.log_text)
         threading.Thread(target=self.process_files, args=(src, self.ignore_dirs_var.get()), daemon=True).start()
 
@@ -155,7 +148,6 @@ class DocstringRemoverApp:
                             
                             clean = self.remove_python_docstrings_only(orig)
                             if clean and clean != orig:
-                                # Backup
                                 gui_utils.create_backup(path, self.logger)
                                 
                                 with open(path, 'w', encoding='utf-8') as ofile:
