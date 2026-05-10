@@ -1,9 +1,10 @@
-import re
 import argparse
-import os
-import sys
 import datetime
+import os
+import re
 import shutil
+import sys
+
 
 def remover_citacoes(texto):
     padrao_original = '\\[\\s*cite\\s*\\\\?:\\s*.*?\\]'
@@ -19,6 +20,9 @@ def log(msg, log_file=None):
     print(formatted)
     if log_file:
         try:
+            log_dir = os.path.dirname(os.path.abspath(log_file))
+            if log_dir:
+                os.makedirs(log_dir, exist_ok=True)
             with open(log_file, 'a', encoding='utf-8') as f:
                 f.write(formatted + '\n')
         except: pass
@@ -33,7 +37,7 @@ def criar_backup(caminho, log_file=None):
 
 def limpar_arquivo_inplace(caminho_arquivo, log_file=None):
     try:
-        with open(caminho_arquivo, 'r', encoding='utf-8', errors='replace') as f:
+        with open(caminho_arquivo, encoding='utf-8', errors='replace') as f:
             conteudo_original = f.read()
     except Exception as e:
         log(f'ERRO ao ler {caminho_arquivo}: {e}', log_file)
@@ -90,7 +94,7 @@ def main():
             limpar_arquivo_inplace(args.arquivo_entrada, args.log)
         elif args.output:
             try:
-                with open(args.arquivo_entrada, 'r', encoding='utf-8') as f: content = f.read()
+                with open(args.arquivo_entrada, encoding='utf-8') as f: content = f.read()
                 clean, cnt = remover_citacoes(content)
                 with open(args.output, 'w', encoding='utf-8') as f: f.write(clean)
                 log(f"Salvo em {args.output} ({cnt} remoções)", args.log)
@@ -100,7 +104,7 @@ def main():
             base, ext = os.path.splitext(args.arquivo_entrada)
             out = f'{base}_limpo{ext}'
             try:
-                with open(args.arquivo_entrada, 'r', encoding='utf-8') as f: content = f.read()
+                with open(args.arquivo_entrada, encoding='utf-8') as f: content = f.read()
                 clean, cnt = remover_citacoes(content)
                 with open(out, 'w', encoding='utf-8') as f: f.write(clean)
                 log(f"Salvo em {out} ({cnt} remoções)", args.log)

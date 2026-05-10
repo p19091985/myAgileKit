@@ -1,13 +1,14 @@
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-import os
 import datetime
-import threading
-import sys
 import logging
+import os
+import sys
+import threading
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
+
 
 class FileMergerApp:
 
@@ -101,7 +102,7 @@ class FileMergerApp:
         if not source_dir or not output_file: return messagebox.showerror('Erro', 'Preencha todos os campos.')
         if not exts: return messagebox.showerror('Erro', 'Selecione extensões.')
         
-        log_file = output_file + ".log"
+        log_file = gui_utils.get_log_path(os.path.basename(output_file) + ".log")
         self.logger = gui_utils.setup_logger("Merger", log_file, self.log_text)
 
         self.process_button.config(state='disabled')
@@ -124,7 +125,7 @@ class FileMergerApp:
                             self.logger.info(f'Adicionando: {rel}')
                             outfile.write(f"\n{'='*80}\n### FILE: {rel}\n{'='*80}\n")
                             try:
-                                with open(path, 'r', encoding='utf-8', errors='ignore') as infile:
+                                with open(path, encoding='utf-8', errors='ignore') as infile:
                                     outfile.write(infile.read())
                             except Exception as e:
                                 self.logger.error(f'Erro ao ler {rel}: {e}')

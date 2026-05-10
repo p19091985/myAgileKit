@@ -1,0 +1,13 @@
+# Origens locais das BIOS do Sega Saturn
+#
+# Este arquivo e apenas uma anotacao manual.
+# O instalador nao baixa BIOS da internet automaticamente.
+#
+# Coloque aqui caminhos locais, um por linha, para lembrar onde estao
+# suas BIOS no computador. Exemplos:
+#
+# /home/patrik/Downloads/Saturn BIOS/mpr-17933.bin
+# /home/patrik/Downloads/Saturn BIOS/sega_101.bin
+#
+# Pasta usada pelo instalador:
+# /home/patrik/Documents/GitHub/myAgileKit/sega saturn/BIOS-SATURN

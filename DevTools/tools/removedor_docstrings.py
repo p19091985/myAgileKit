@@ -1,11 +1,11 @@
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext
-import os
-import threading
-import sys
-import datetime
 import ast
+import datetime
+import os
 import re
+import sys
+import threading
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
@@ -23,9 +23,14 @@ class DocstringRemover(ast.NodeTransformer):
         return (found_keywords >= 2)
 
     def _remove_docstring(self, node):
-        if not (node.body and isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Str)):
+        if not node.body or not isinstance(node.body[0], ast.Expr):
             return node
-        docstring_content = node.body[0].value.s
+
+        first_value = node.body[0].value
+        if not isinstance(first_value, ast.Constant) or not isinstance(first_value.value, str):
+            return node
+
+        docstring_content = first_value.value
         if self._is_sql_string(docstring_content):
             return node
         node.body = node.body[1:]
@@ -99,10 +104,10 @@ class DocstringRemoverApp:
         if d:
             self.source_dir_var.set(d)
             ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-            self.log_file_var.set(os.path.join(self.script_directory, f'log_docstrings_{ts}.log'))
+            self.log_file_var.set(gui_utils.get_log_path(f'log_docstrings_{ts}.log'))
 
     def browse_log_file(self):
-        f = filedialog.asksaveasfilename(defaultextension='.log', filetypes=[('Log', '*.log')])
+        f = filedialog.asksaveasfilename(defaultextension='.log', initialdir=str(gui_utils.ensure_logs_dir()), filetypes=[('Log', '*.log')])
         if f: self.log_file_var.set(f)
 
     def start_processing_thread(self):
@@ -143,7 +148,7 @@ class DocstringRemoverApp:
                         processed += 1
                         
                         try:
-                            with open(path, 'r', encoding='utf-8') as ifile:
+                            with open(path, encoding='utf-8') as ifile:
                                 orig = ifile.read()
                             
                             clean = self.remove_python_docstrings_only(orig)

@@ -1,0 +1,11 @@
+{
+  "identifier": "ffmpeg-converter",
+  "name": "Conversor FFmpeg Pro",
+  "group": "Midia",
+  "description": "Converte videos para audio MP3 respeitando um tamanho maximo em MB.",
+  "entrypoint": "audioExtract/conversor_ffmpeg_pro.py",
+  "requires_modules": ["tkinter"],
+  "requires_commands": ["ffmpeg", "ffprobe"],
+  "test_target": "tests/test_audio_converter_logic.py"
+}
+

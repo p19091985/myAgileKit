@@ -1,0 +1,13 @@
+# Origens locais dos CDs do Death Tank
+#
+# Este arquivo e apenas uma anotacao manual.
+# O instalador nao baixa imagens de jogos da internet automaticamente.
+#
+# Coloque aqui caminhos locais, um por linha, para lembrar onde estao
+# seus arquivos no computador. Exemplos:
+#
+# /home/patrik/Downloads/DeathTank.rar
+# /home/patrik/Downloads/DeathTank2.rar
+#
+# Pasta usada pelo instalador:
+# /home/patrik/Documents/GitHub/myAgileKit/sega saturn/DT

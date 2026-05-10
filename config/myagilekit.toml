@@ -1,0 +1,16 @@
+[project]
+name = "myAgileKit"
+version = "0.1.0"
+
+[logs]
+root = "logs"
+categories = ["install", "tools", "tests", "errors"]
+
+[installer]
+default_mode = "gui"
+run_tests = true
+install_system_packages = false
+
+[manager]
+show_windows_tools_on_linux = true
+

@@ -1,10 +1,12 @@
-import tkinter as tk
-from tkinter import ttk
-import sys
-import os
-import logging
-import shutil
+import contextlib
 import datetime
+import logging
+import os
+import shutil
+import sys
+import tkinter as tk
+from pathlib import Path
+from tkinter import ttk
 
 WINDOW_WIDTH = 900
 WINDOW_HEIGHT = 700
@@ -25,15 +27,20 @@ else:
     FONT_FAMILY = "Liberation Sans"
     FONT_MONO = "DejaVu Sans Mono"
 
-try:
-    pass 
-except:
-    pass
-
 FONT_H1 = (FONT_FAMILY, 18, 'bold')
 FONT_H2 = (FONT_FAMILY, 12, 'bold')
 FONT_BODY = (FONT_FAMILY, 10)
 FONT_CODE = (FONT_MONO, 9)
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+LOGS_DIR = PROJECT_ROOT / "logs"
+
+def ensure_logs_dir():
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    return LOGS_DIR
+
+def get_log_path(filename):
+    return str(ensure_logs_dir() / filename)
 
 def setup_window(root, title="DevTools"):
     root.title(title)
@@ -49,10 +56,8 @@ def setup_window(root, title="DevTools"):
     root.minsize(MIN_WIDTH, MIN_HEIGHT)
     
     style = ttk.Style()
-    try:
+    with contextlib.suppress(tk.TclError):
         style.theme_use('clam')
-    except tk.TclError:
-        pass
 
     style.configure('.', font=FONT_BODY, background=COLOR_BG, foreground=COLOR_TEXT)
     style.configure('TFrame', background=COLOR_BG)
@@ -109,6 +114,9 @@ class GuiHandler(logging.Handler):
         self.text_widget.after(0, append)
 
 def setup_logger(name, log_file, text_widget=None):
+    log_parent = os.path.dirname(os.path.abspath(log_file))
+    if log_parent:
+        os.makedirs(log_parent, exist_ok=True)
     
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)

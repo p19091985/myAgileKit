@@ -1,0 +1,10 @@
+{
+  "identifier": "controller-tester",
+  "name": "PS Controller Tester",
+  "group": "Sistema",
+  "description": "Diagnostico visual para controles via Pygame.",
+  "entrypoint": "OSTools/vericar controle.py",
+  "requires_modules": ["pygame"],
+  "test_target": "tests/test_project_integrity.py"
+}
+

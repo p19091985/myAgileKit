@@ -1,0 +1,13 @@
+{
+  "identifier": "installer",
+  "name": "Instalador myAgileKit",
+  "group": "Instalacao",
+  "description": "Instalador grafico/CLI para preparar ambiente, requirements e checks.",
+  "entrypoint": "instalacao/instalar.sh",
+  "launch_mode": "shell",
+  "platforms": ["linux", "darwin"],
+  "requires_modules": ["tkinter"],
+  "requires_commands": ["bash"],
+  "test_target": "tests/test_tool_registry.py"
+}
+

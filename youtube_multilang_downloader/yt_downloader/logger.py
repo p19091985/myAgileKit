@@ -1,8 +1,18 @@
 import logging
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+LOGS_DIR = PROJECT_ROOT / "logs"
+
+
+def log_file_path(filename):
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    return LOGS_DIR / filename
 
 def setup_logging():
     logging.basicConfig(
-        filename='debug_log.txt',
+        filename=log_file_path('debug_log.txt'),
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s',
         filemode='w'

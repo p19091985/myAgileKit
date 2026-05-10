@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myagilekit"
+version = "0.1.0"
+description = "Colecao organizada de mini sistemas para produtividade, midia, editores e automacoes locais."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Patrik" }]
+dependencies = [
+  "pygame>=2.6.1",
+  "ruff>=0.11.0",
+  "yt-dlp>=2025.1.1",
+]
+
+[project.scripts]
+myagilekit-manager = "myagilekit.manager.gui:main"
+
+[tool.setuptools.packages.find]
+include = ["editor_tools", "myagilekit*"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+exclude = [
+  ".git",
+  ".ruff_cache",
+  ".venv",
+  "__pycache__",
+  "logs",
+]
+
+[tool.ruff.lint]
+select = ["B", "C4", "E", "F", "I", "SIM", "UP"]
+ignore = ["E501"]
+
+[tool.myagilekit.commands]
+test = ".venv/bin/python -m unittest discover -s tests"
+ruff = ".venv/bin/python editor_tools/run_incremental_ruff.py"
+install = "./instalacao/instalar.sh"
+install_gui = "./instalacao/instalar.sh --gui"
+install_cli = "./instalacao/instalar.sh --cli"
+install_check = "./instalacao/instalar.sh --check"

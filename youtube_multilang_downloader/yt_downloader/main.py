@@ -1,8 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 import traceback
+from pathlib import Path
 from .logger import setup_logging
 from .ui import YoutubeDownloaderApp
+
+
+LOGS_DIR = Path(__file__).resolve().parents[2] / "logs"
 
 def main():
     setup_logging()
@@ -21,7 +25,8 @@ def main():
         root.mainloop()
         
     except Exception as e:
-        with open("debug_log.txt", "a") as f:
+        LOGS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(LOGS_DIR / "debug_log.txt", "a") as f:
             f.write(f"\nCRASH DE INICIALIZAÇÃO:\n{traceback.format_exc()}")
         print(f"Erro crítico: {e}")
 

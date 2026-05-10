@@ -1,11 +1,10 @@
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+import datetime
 import os
 import re
 import sys
 import threading
-from typing import Set
-import datetime
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
@@ -15,7 +14,7 @@ pattern_true = re.compile(r'\buse_container_width\s*=\s*True', re.IGNORECASE)
 replacement_true = "width='stretch'"
 pattern_false = re.compile(r'\buse_container_width\s*=\s*False', re.IGNORECASE)
 replacement_false = "width='content'"
-EXCLUDE_DIRS: Set[str] = {'.venv', 'venv', 'env', '.git', '.idea', '__pycache__', 'node_modules'}
+EXCLUDE_DIRS: set[str] = {'.venv', 'venv', 'env', '.git', '.idea', '__pycache__', 'node_modules'}
 
 class RefactorGUI(tk.Tk):
 
@@ -23,7 +22,7 @@ class RefactorGUI(tk.Tk):
         super().__init__()
         gui_utils.setup_window(self, 'DevTools - Corretor Streamlit')
         
-        self.selected_paths: Set[str] = set()
+        self.selected_paths: set[str] = set()
         self.thread = None
         self.logger = None
         
@@ -91,10 +90,9 @@ class RefactorGUI(tk.Tk):
 
     def select_directory(self):
         d = filedialog.askdirectory()
-        if d:
-            if d not in self.selected_paths:
-                self.selected_paths.add(d)
-                self.update_listbox()
+        if d and d not in self.selected_paths:
+            self.selected_paths.add(d)
+            self.update_listbox()
 
     def remove_selected(self):
         selection = self.path_listbox.curselection()
@@ -137,7 +135,7 @@ class RefactorGUI(tk.Tk):
             return
         
         ts = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"Corretor_Log_{ts}.log")
+        log_file = gui_utils.get_log_path(f"Corretor_Log_{ts}.log")
         self.logger = gui_utils.setup_logger("Corretor", log_file, self.log_area)
 
         self.toggle_controls(False)
@@ -187,7 +185,7 @@ class RefactorGUI(tk.Tk):
 
     def processar_arquivo_thread(self, file_path: str) -> bool:
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
             
             modified_content = content

@@ -1,0 +1,12 @@
+{
+  "identifier": "sega-saturn-death-tank",
+  "name": "Sega Saturn / Death Tank",
+  "group": "Jogos",
+  "description": "Instala e configura Ymir, Mednafen e Kronos para Sega Saturn, prepara Death Tank Zwei localmente e cria atalhos.",
+  "entrypoint": "sega saturn/instalar deathTank.sh",
+  "launch_mode": "shell",
+  "platforms": ["linux"],
+  "requires_commands": ["bash", "python3"],
+  "test_target": "tests/test_tool_registry.py",
+  "working_dir": "sega saturn"
+}

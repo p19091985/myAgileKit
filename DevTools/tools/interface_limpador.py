@@ -1,12 +1,13 @@
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+import datetime
+import os
 import subprocess
 import sys
-import os
-import datetime
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
+
 
 class LimparCitacoesApp(tk.Tk):
 
@@ -15,7 +16,7 @@ class LimparCitacoesApp(tk.Tk):
         gui_utils.setup_window(self, 'DevTools - Interface Limpador')
         
         self.script_alvo = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'limpar_citacoes.py')
-        self.log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"Limpador_Log_{datetime.datetime.now().strftime('%Y%m%d')}.log")
+        self.log_file = gui_utils.get_log_path(f"Limpador_Log_{datetime.datetime.now().strftime('%Y%m%d')}.log")
 
         self.create_widgets()
 

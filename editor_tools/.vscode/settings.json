@@ -1,0 +1,10 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "material-icon-theme.folders.theme": "specific",
+  "material-icon-theme.hidesExplorerArrows": false,
+  "explorer.compactFolders": false,
+  "workbench.tree.indent": 12,
+  "vscode_custom_css.imports": [
+    "file:///home/patrik/.config/vscode-folder-style/folder-plus-minus.css"
+  ]
+}

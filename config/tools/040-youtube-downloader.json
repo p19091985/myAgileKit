@@ -1,0 +1,10 @@
+{
+  "identifier": "youtube-downloader",
+  "name": "YouTube Multilang Downloader",
+  "group": "Midia",
+  "description": "Interface para baixar videos com multiplas faixas de audio e legendas.",
+  "entrypoint": "youtube_multilang_downloader/youtube_multilang.py",
+  "requires_modules": ["tkinter", "yt_dlp"],
+  "test_target": "tests/test_youtube_service_logic.py"
+}
+

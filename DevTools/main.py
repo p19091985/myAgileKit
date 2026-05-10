@@ -1,12 +1,12 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
 import os
-import sys
 import subprocess
-from typing import List, Tuple
+import sys
+import tkinter as tk
+from tkinter import messagebox, ttk
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'tools'))
 import gui_utils
+
 
 class DevToolsLauncher(tk.Tk):
     def __init__(self):
@@ -19,7 +19,7 @@ class DevToolsLauncher(tk.Tk):
 
         gui_utils.create_header(self, "DevTools", "Selecione uma ferramenta para continuar")
 
-        self.tools_list: List[Tuple[str, str, str]] = [
+        self.tools_list: list[tuple[str, str, str]] = [
             ("Corretor Streamlit", "corretor_streamlit.py", "Refatora scripts Streamlit corrigindo avisos de depreciação (use_container_width)."),
             ("File Modifier", "file_modifier.py", "Ferramenta para modificação em massa de arquivos com suporte a 30+ linguagens."),
             ("Interface Limpador", "interface_limpador.py", "Interface gráfica para ferramentas de limpeza e remoção de citações."),

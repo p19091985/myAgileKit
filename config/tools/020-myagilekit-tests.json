@@ -1,0 +1,9 @@
+{
+  "identifier": "myagilekit-tests",
+  "name": "Suite de testes",
+  "group": "Verificacao",
+  "description": "Executa os testes unitarios centralizados em tests/.",
+  "entrypoint": "editor_tools/pipeline_runner.py",
+  "requires_modules": ["tkinter"],
+  "test_target": "tests"
+}

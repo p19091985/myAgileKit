@@ -1,0 +1,11 @@
+{
+  "identifier": "windows-update-powershell",
+  "name": "Windows Update Menu PowerShell",
+  "group": "Windows",
+  "description": "Menu PowerShell para tarefas de Windows Update.",
+  "entrypoint": "OSTools/windows-update-menu.ps1",
+  "launch_mode": "powershell",
+  "platforms": ["win32"],
+  "test_target": "tests/test_project_integrity.py"
+}
+

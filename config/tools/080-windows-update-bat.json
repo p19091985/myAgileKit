@@ -1,0 +1,11 @@
+{
+  "identifier": "windows-update-bat",
+  "name": "Windows Update Menu BAT",
+  "group": "Windows",
+  "description": "Menu interativo BAT para tarefas de Windows Update.",
+  "entrypoint": "OSTools/windows-update-menu.bat",
+  "launch_mode": "batch",
+  "platforms": ["win32"],
+  "test_target": "tests/test_project_integrity.py"
+}
+

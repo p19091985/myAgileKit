@@ -5,9 +5,15 @@ import threading
 import os
 import logging
 import traceback
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+LOGS_DIR = PROJECT_ROOT / "logs"
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
-    filename='debug_log_user.txt',
+    filename=LOGS_DIR / 'debug_log_user.txt',
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     filemode='w'

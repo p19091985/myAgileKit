@@ -1,0 +1,12 @@
+{
+  "identifier": "virtualbox-paths",
+  "name": "Corretor de caminhos VirtualBox",
+  "group": "Sistema",
+  "description": "Corrige referencias antigas de montagem em VirtualBox.xml e arquivos .vbox apos migracao de disco/ponto de montagem.",
+  "entrypoint": "OSTools/corrigir_virtualbox_paths.sh",
+  "launch_mode": "shell",
+  "default_args": ["--help"],
+  "platforms": ["linux", "darwin"],
+  "requires_commands": ["bash", "python3"],
+  "test_target": "tests/test_project_integrity.py"
+}

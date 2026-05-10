@@ -4,6 +4,24 @@
 *.logs
 *.db
 *.txt
+!requirements.txt
+cookies.txt
+**/cookies.txt
+*.cookies.txt
+logs/**
+!logs/
+!logs/**/
+!logs/**/.gitkeep
+
+# Sega Saturn BIOS files are local/proprietary.
+/sega saturn/BIOS-SATURN/
+
+# Local Sega Saturn game archives/images.
+/sega saturn/DT/
+/sega saturn/.DT/
+
+!/sega saturn/origens_bios.txt
+!/sega saturn/origens_cds.txt
 
 /documentacao
 

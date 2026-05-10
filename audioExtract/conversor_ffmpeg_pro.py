@@ -1,9 +1,9 @@
+import json
 import os
+import subprocess
 import threading
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext
-import subprocess
-import json
+from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 
 class FFmpegConverterApp:
@@ -150,10 +150,12 @@ class FFmpegConverterApp:
             filename = os.path.basename(filepath)
 
             # Atualiza UI
-            self.root.after(0, lambda: self.progress.configure(value=(i / total) * 100))
-            self.root.after(0, lambda: self.lbl_status.configure(text=f"Convertendo: {filename}"))
+            progress_value = (i / total) * 100
+            status_text = f"Convertendo: {filename}"
             child_id = self.tree.get_children()[i]
-            self.root.after(0, lambda: self.tree.set(child_id, "status", "🔄 Convertendo..."))
+            self.root.after(0, lambda value=progress_value: self.progress.configure(value=value))
+            self.root.after(0, lambda text=status_text: self.lbl_status.configure(text=text))
+            self.root.after(0, lambda item=child_id: self.tree.set(item, "status", "🔄 Convertendo..."))
 
             try:
                 # 1. Pega duração
@@ -170,7 +172,8 @@ class FFmpegConverterApp:
                 # Limites de sanidade (min 32k, max 192k)
                 bitrate = max(32, min(bitrate_calc, 192))
 
-                self.root.after(0, lambda m=f"Duração: {duration / 60:.1f}m | Bitrate: {bitrate}k": self.log(m))
+                bitrate_message = f"Duração: {duration / 60:.1f}m | Bitrate: {bitrate}k"
+                self.root.after(0, lambda message=bitrate_message: self.log(message))
 
                 # 3. Prepara Comando FFmpeg
                 output_name = os.path.splitext(filepath)[0] + ".mp3"
@@ -186,17 +189,19 @@ class FFmpegConverterApp:
                 ]
 
                 # Executa
-                process = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                process = subprocess.run(cmd, capture_output=True, text=True)
 
                 if process.returncode == 0:
-                    self.root.after(0, lambda: self.tree.set(child_id, "status", "✅ Sucesso"))
-                    self.root.after(0, lambda n=os.path.basename(output_name): self.log(f"Salvo: {n}"))
+                    saved_name = os.path.basename(output_name)
+                    self.root.after(0, lambda item=child_id: self.tree.set(item, "status", "✅ Sucesso"))
+                    self.root.after(0, lambda name=saved_name: self.log(f"Salvo: {name}"))
                 else:
                     raise Exception("FFmpeg retornou erro.")
 
             except Exception as e:
-                self.root.after(0, lambda: self.tree.set(child_id, "status", "❌ Erro"))
-                self.root.after(0, lambda err=str(e): self.log(f"ERRO: {err}"))
+                error_message = str(e)
+                self.root.after(0, lambda item=child_id: self.tree.set(item, "status", "❌ Erro"))
+                self.root.after(0, lambda err=error_message: self.log(f"ERRO: {err}"))
 
         self.root.after(0, self.finish)
 

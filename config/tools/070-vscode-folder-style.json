@@ -1,0 +1,12 @@
+{
+  "identifier": "vscode-folder-style",
+  "name": "VS Code Folder Style",
+  "group": "Editor",
+  "description": "Aplica icones de pasta e estilo + / - no Explorer do VS Code.",
+  "entrypoint": "editor_tools/vscode_folder_style.sh",
+  "launch_mode": "shell",
+  "default_args": ["--dry-run", "--settings-scope", "project"],
+  "platforms": ["linux", "darwin"],
+  "requires_commands": ["bash"],
+  "test_target": "tests/test_vscode_folder_style.py"
+}

@@ -1,13 +1,13 @@
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-import os
-import threading
-import sys
-import re
-import tokenize
-import io
 import datetime
+import io
 import logging
+import os
+import re
+import sys
+import threading
+import tkinter as tk
+import tokenize
+from tkinter import filedialog, messagebox, ttk
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import gui_utils
@@ -137,10 +137,10 @@ class CommentRemoverApp:
             self.source_dir_var.set(directory)
             timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
             log_filename = f'Modifier_Log_{timestamp}.log'
-            self.log_file_var.set(os.path.join(self.script_directory, log_filename))
+            self.log_file_var.set(gui_utils.get_log_path(log_filename))
 
     def browse_log_file(self):
-        filepath = filedialog.asksaveasfilename(title='Salvar log...', defaultextension='.log', initialdir=self.script_directory, filetypes=[('Log Files', '*.log')])
+        filepath = filedialog.asksaveasfilename(title='Salvar log...', defaultextension='.log', initialdir=str(gui_utils.ensure_logs_dir()), filetypes=[('Log Files', '*.log')])
         if filepath:
             self.log_file_var.set(filepath)
 
@@ -232,7 +232,7 @@ class CommentRemoverApp:
                     processed += 1
                     
                     try:
-                        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                        with open(file_path, encoding='utf-8', errors='ignore') as f:
                             original = f.read()
                         
                         cleaned = self.clean_content(original, strategy)

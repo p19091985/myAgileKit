@@ -1,0 +1,10 @@
+{
+  "identifier": "devtools",
+  "name": "DevTools Launcher",
+  "group": "Desenvolvimento",
+  "description": "Launcher das ferramentas Python de limpeza, refatoracao e manipulacao de arquivos.",
+  "entrypoint": "DevTools/main.py",
+  "requires_modules": ["tkinter"],
+  "test_target": "tests/test_devtools_logic.py"
+}
+
